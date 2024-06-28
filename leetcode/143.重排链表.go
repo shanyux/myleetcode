@@ -1,5 +1,3 @@
-package main
-
 /*
  * @lc app=leetcode.cn id=143 lang=golang
  *
@@ -14,6 +12,8 @@ package main
  *     Next *ListNode
  * }
  */
+package main
+
 func reorderList(head *ListNode) {
 	if head == nil || head.Next == nil {
 		return
@@ -53,6 +53,40 @@ func reverseList(head *ListNode) *ListNode {
 		tail = newHead
 	}
 	return prev
+}
+
+func reorderList(head *ListNode) {
+	len := 0
+	h := head
+	if head == nil || head.Next == nil || head.Next.Next == nil {
+		return
+	}
+	for h != nil {
+		h = h.Next
+		len++
+	}
+	reorderList1(head, len)
+}
+
+func reorderList1(head *ListNode, len int) *ListNode {
+	if len == 1 {
+		res := head.Next
+		head.Next = nil
+		return res
+	}
+
+	if len == 2 {
+		res := head.Next.Next
+		head.Next.Next = nil
+		return res
+	}
+
+	tail := reorderList1(head.Next, len-2)
+	hn := head.Next
+	head.Next = tail
+	tn := tail.Next
+	tail.Next = hn
+	return tn
 }
 
 // @lc code=end
