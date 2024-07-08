@@ -54,3 +54,62 @@ func sortList(head *ListNode) *ListNode {
 }
 
 // @lc code=end
+
+func sortList(head *ListNode) *ListNode {
+	if head == nil || head.Next == nil {
+		return head
+	}
+	len, h := 0, head
+	for h != nil {
+		h = h.Next
+		len++
+	}
+	dummy := &ListNode{
+		Next: head,
+	}
+	w := 1
+	for w < len {
+		pre, h := dummy, dummy.Next
+		for h != nil {
+			h1, w1 := h, w
+			for h != nil && w1 > 0 {
+				h = h.Next
+				w1--
+			}
+			if w1 > 0 {
+				break
+			}
+			h2, w2 := h, w
+			for h != nil && w2 > 0 {
+				h = h.Next
+				w2--
+			}
+			c1, c2 := w, w-w2
+			for c1 > 0 && c2 > 0 {
+				if h1.Val > h2.Val {
+					pre.Next, h2 = h2, h2.Next
+					c2--
+				} else {
+					pre.Next, h1 = h1, h1.Next
+					c1--
+				}
+				pre = pre.Next
+			}
+			if c1 > 0 {
+				pre.Next = h1
+			} else {
+				pre.Next = h2
+			}
+
+			for c1 > 0 || c2 > 0 {
+				pre = pre.Next
+				c1--
+				c2--
+			}
+			pre.Next = h
+		}
+		w *= 2
+	}
+
+	return dummy.Next
+}
